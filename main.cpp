@@ -18,7 +18,7 @@ using namespace std;
 
 class Timer {
  private:
-  double start_time;
+    double start_time;
 
 #ifdef USE_RDTSC
     double get_msec() { return get_absolute_sec() * 1000; }
@@ -35,21 +35,21 @@ public:
 
 class Entity {
  public:
-  int entityType;
-  int owner;
-  int x, y;
-  int param1, param2;
+    int entityType;
+    int owner;
+    int x, y;
+    int param1, param2;
 
-  Entity() {}
+    Entity() {}
 
-  Entity(
-    int _entityType,
-    int _owner,
-    int _x,
-    int _y,
-    int _param1,
-    int _param2
-  ) :
+    Entity(
+        int _entityType,
+        int _owner,
+        int _x,
+        int _y,
+        int _param1,
+        int _param2
+    ) :
     entityType(_entityType),
     owner(_owner),
     x(_x),
@@ -57,30 +57,30 @@ class Entity {
     param1(_param1),
     param2(_param2) {}
 
-  string toString() {
-    stringstream ss;
-    ss << "\n";
-    ss << "Entity >";
-    ss << "type:" << entityType << "\n";
-    ss << "owner: " << owner << "\n";
-    ss << "pos: " << x << ", " << y << "\n";
-    ss << "params: " << param1 << ", " << param2 << "\n";
-    return ss.str();
-  }
+    string toString() {
+        stringstream ss;
+        ss << "\n";
+        ss << "Entity >";
+        ss << "type:" << entityType << "\n";
+        ss << "owner: " << owner << "\n";
+        ss << "pos: " << x << ", " << y << "\n";
+        ss << "params: " << param1 << ", " << param2 << "\n";
+        return ss.str();
+    }
 
-  static Entity buildFromInput() {
-    int entityType;
-    int owner;
-    int x, y;
-    int param1, param2;
-    cin >> entityType >> owner >> x >> y >> param1 >> param2; cin.ignore();
-    return Entity(
-      entityType,
-      owner,
-      x, y,
-      param1, param2
-    );
-  }
+    static Entity buildFromInput() {
+        int entityType;
+        int owner;
+        int x, y;
+        int param1, param2;
+        cin >> entityType >> owner >> x >> y >> param1 >> param2; cin.ignore();
+        return Entity(
+            entityType,
+            owner,
+            x, y,
+            param1, param2
+        );
+    }
 };
 
 class Brain {
@@ -89,158 +89,159 @@ class Brain {
 
 class StageInfo {
  public:
-  int width, height, myId;
-  StageInfo(
-    int _width,
-    int _height,
-    int _myId) :
-      width(_width),
-      height(_height),
-      myId(_myId) {}
-
-  static StageInfo buildFromInput() {
     int width, height, myId;
-    cin >> width >> height >> myId; cin.ignore();
-    return StageInfo(width, height, myId);
-  }
+    StageInfo(
+        int _width,
+        int _height,
+        int _myId
+    ) :
+    width(_width),
+    height(_height),
+    myId(_myId) {}
+
+    static StageInfo buildFromInput() {
+        int width, height, myId;
+        cin >> width >> height >> myId; cin.ignore();
+        return StageInfo(width, height, myId);
+    }
 };
 
 vector<vector<bool>> buildIsWallMap(StageInfo stageInfo, vector<string> map) {
-  vector<vector<bool>> results(
-    stageInfo.height,
-    vector<bool>(stageInfo.width, false)
-  );
+    vector<vector<bool>> results(
+        stageInfo.height,
+        vector<bool>(stageInfo.width, false)
+    );
 
-  for (int i = 0; i < stageInfo.height; ++i) {
-    for (int j = 0; j < stageInfo.width; ++j) {
-      if (map[i][j] != '.') { results[i][j] = true; }
+    for (int i = 0; i < stageInfo.height; ++i) {
+        for (int j = 0; j < stageInfo.width; ++j) {
+            if (map[i][j] != '.') { results[i][j] = true; }
+        }
     }
-  }
-  return results;
+    return results;
 }
 
 vector<vector<bool>> buildIsBoxMap(StageInfo stageInfo, vector<string> map) {
-  vector<vector<bool>> results(
-    stageInfo.height,
-    vector<bool>(stageInfo.width, false)
-  );
+    vector<vector<bool>> results(
+        stageInfo.height,
+        vector<bool>(stageInfo.width, false)
+    );
 
-  for (int i = 0; i < stageInfo.height; ++i) {
-    for (int j = 0; j < stageInfo.width; ++j) {
-      if (map[i][j] != '.' && map[i][j] != 'X') { results[i][j] = true; }
+    for (int i = 0; i < stageInfo.height; ++i) {
+        for (int j = 0; j < stageInfo.width; ++j) {
+            if (map[i][j] != '.' && map[i][j] != 'X') { results[i][j] = true; }
+        }
     }
-  }
-  return results;
+    return results;
 }
 
 vector<string> buildStrMapFromInput(StageInfo stageInfo) {
-  vector<string> results(stageInfo.height);
-  for (int i = 0; i < stageInfo.height; i++) {
-    string row;
-    cin >> row;
-    results[i] = row;
-  }
-  return results;
+    vector<string> results(stageInfo.height);
+    for (int i = 0; i < stageInfo.height; i++) {
+        string row;
+        cin >> row;
+        results[i] = row;
+    }
+    return results;
 }
 
 vector<vector<bool>> buildIsBombMap(StageInfo stageInfo, vector<Entity> entities) {
-  vector<vector<bool>> results(
-    stageInfo.height,
-    vector<bool>(stageInfo.width, false)
-  );
-  for (auto entity : entities) {
-    if (entity.entityType == 1) {
-      results[entity.y][entity.x] = true;
+    vector<vector<bool>> results(
+        stageInfo.height,
+        vector<bool>(stageInfo.width, false)
+    );
+    for (auto entity : entities) {
+        if (entity.entityType == 1) {
+            results[entity.y][entity.x] = true;
+        }
     }
-  }
-  return results;
+    return results;
 }
 
 vector<vector<int>> buildScoreMap(
-  StageInfo stageInfo,
-  vector<vector<bool>> IsWallMap,
-  vector<vector<bool>> IsBombMap,
-  vector<vector<bool>> IsBoxMap
+    StageInfo stageInfo,
+    vector<vector<bool>> IsWallMap,
+    vector<vector<bool>> IsBombMap,
+    vector<vector<bool>> IsBoxMap
 ) {
-  vector<vector<int>> results(
-    stageInfo.height,
-    vector<int>(stageInfo.width, 0)
-  );
+    vector<vector<int>> results(
+        stageInfo.height,
+        vector<int>(stageInfo.width, 0)
+    );
 
-  int h = 0, w = 0, wallDist = 0, bombDist = 0;
-  auto wallStep = [&]() {
-    if (wallDist != 0) {
-      ++results[h][w];
-      --wallDist;
-    }
-    if (IsWallMap[h][w]) {
-      wallDist = 0;
-      results[h][w] = 0;
-    }
-    if (IsBoxMap[h][w]) {
-      wallDist = 3;
-      results[h][w] = 0;
-    }
-  };
-  auto bombStep = [&]() {
-    if (bombDist != 0) {
-      results[h][w] = 0;
-      --bombDist;
-    }
-    if (IsWallMap[h][w]) {
-      bombDist = 0;
-      results[h][w] = 0;
-    }
-    if (IsBombMap[h][w]) {
-      bombDist = 3;
-      results[h][w] = 0;
-    }
-  };
-  for(h = 0; h < stageInfo.height; ++h) {
-    wallDist = 0;
-    for(w = 0; w < stageInfo.width; ++w) {
-      wallStep();
-    }
-    wallDist = 0;
-    for(w = stageInfo.width - 1; 0 <= w; --w) {
-      wallStep();
-    }
-    bombDist = 0;
-    for(w = 0; w < stageInfo.width; ++w) {
-      bombStep();
-    }
-    bombDist = 0;
-    for(w = stageInfo.width - 1; 0 <= w; --w) {
-      bombStep();
-    }
-  }
-
-  for(w = 0; w < stageInfo.width; ++w) {
-    wallDist = 0;
+    int h = 0, w = 0, wallDist = 0, bombDist = 0;
+    auto wallStep = [&]() {
+        if (wallDist != 0) {
+            ++results[h][w];
+            --wallDist;
+        }
+        if (IsWallMap[h][w]) {
+            wallDist = 0;
+            results[h][w] = 0;
+        }
+        if (IsBoxMap[h][w]) {
+            wallDist = 3;
+            results[h][w] = 0;
+        }
+    };
+    auto bombStep = [&]() {
+        if (bombDist != 0) {
+            results[h][w] = 0;
+            --bombDist;
+        }
+        if (IsWallMap[h][w]) {
+            bombDist = 0;
+            results[h][w] = 0;
+        }
+        if (IsBombMap[h][w]) {
+            bombDist = 3;
+            results[h][w] = 0;
+        }
+    };
     for(h = 0; h < stageInfo.height; ++h) {
-      wallStep();
+        wallDist = 0;
+        for(w = 0; w < stageInfo.width; ++w) {
+            wallStep();
+        }
+        wallDist = 0;
+        for(w = stageInfo.width - 1; 0 <= w; --w) {
+            wallStep();
+        }
+        bombDist = 0;
+        for(w = 0; w < stageInfo.width; ++w) {
+            bombStep();
+        }
+        bombDist = 0;
+        for(w = stageInfo.width - 1; 0 <= w; --w) {
+            bombStep();
+        }
     }
-    wallDist = 0;
-    for(h = stageInfo.height - 1; 0 <= h; --h) {
-      wallStep();
-    }
-    bombDist = 0;
-    for(h = 0; h < stageInfo.height; ++h) {
-      bombStep();
-    }
-    bombDist = 0;
-    for(h = stageInfo.height - 1; 0 <= h; --h) {
-      bombStep();
-    }
-  }
 
-  for(int h = 0; h < stageInfo.height; ++h) {
-    for(int w = 0; w < stageInfo.width; ++w) {
-      cerr << results[h][w] << " ";
+    for(w = 0; w < stageInfo.width; ++w) {
+        wallDist = 0;
+        for(h = 0; h < stageInfo.height; ++h) {
+            wallStep();
+        }
+        wallDist = 0;
+        for(h = stageInfo.height - 1; 0 <= h; --h) {
+            wallStep();
+        }
+        bombDist = 0;
+        for(h = 0; h < stageInfo.height; ++h) {
+            bombStep();
+        }
+        bombDist = 0;
+        for(h = stageInfo.height - 1; 0 <= h; --h) {
+            bombStep();
+        }
     }
-    cerr << endl;
-  }
-  return results;
+
+    for(int h = 0; h < stageInfo.height; ++h) {
+        for(int w = 0; w < stageInfo.width; ++w) {
+            cerr << results[h][w] << " ";
+        }
+        cerr << endl;
+    }
+    return results;
 }
 
 
@@ -248,8 +249,7 @@ vector<vector<int>> buildScoreMap(
  * Grab Snaffles and try to throw them through the opponent's goal!
  * Move towards a Snaffle and use your team id to determine where you need to throw it.
  **/
-int main()
-{
+int main() {
     int myTeamId; // if 0 you need to score on the right of the map, if 1 you need to score on the left
     cin >> myTeamId; cin.ignore();
 
